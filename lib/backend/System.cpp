@@ -894,7 +894,7 @@ void System::broadcast_p2p(int addr,
     else{
         std::cout<<"broadcast type not set. using p2p systolic broadcast by default"<<std::endl;
     }
-    std::cout<<"Using p2p systolic broadcast"<<std::endl;
+    // std::cout<<"Using p2p systolic broadcast"<<std::endl;
     Request *request;
     int tile = addr/(_config->_nblocks*_config->_nrows*_config->_ncols);
     assert(tile<_config->_meshWidth * _config->_meshHeight);
