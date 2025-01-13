@@ -12,7 +12,10 @@ void func_gemm_tiled( int M, int K, int N,\
     // if(M < N){
     //     std::swap(M, N);
     // }
-
+    //8bit multiplication
+    //16bit result
+    //need 17 rows to store 8bit operand and 16 bit result simultanously, as operand can be discarded bit by bit during computation
+    //tile_capacity indicates available capacity to store matrix A and B, the rest are for temp data, multiply results (16 rows) and accumulated results (32 rows).
     int tile_capacity = (cfg->_nrows-precision_accumulate.bits()-precision_input.bits()) * cfg->_ncols * cfg->_nblocks;
     int matrixBSize = K * N * precision_input.bits();
     
@@ -27,8 +30,8 @@ void func_gemm_tiled( int M, int K, int N,\
     int K_base_tile = cfg->_nblocks;
     int N_base_tile = cfg->_ncols;
     int N_multiple = 1;
-    int K_multiple = min((int)ceil(K/float(K_base_tile)), (int)floor(tile_capacity/float(K_base_tile*N_base_tile*precision_input.bits())));
-    int M_multiple = min((int)ceil(M/float(M_base_tile)) , (int)floor((tile_capacity - K_multiple*K_base_tile*N_base_tile*precision_input.bits())/cfg->_ncols/cfg->_nblocks/precision_input.bits()));
+    int K_multiple = min((int)ceil(K/float(K_base_tile)), (int)floor((tile_capacity- cfg->_ncols*cfg->_nblocks*precision_input.bits())/float(K_base_tile*N_base_tile*precision_input.bits())));//need to leave rows for at least 1 row of A, the rest can store cols of B as much as possible
+    int M_multiple = min((int)ceil(M/float(M_base_tile)) , (int)floor((tile_capacity - K_multiple*K_base_tile*N_base_tile*precision_input.bits())/cfg->_ncols/cfg->_nblocks/precision_input.bits()));//the rest can store multiple A rows
 
     int local_M = M_base_tile * M_multiple;
     int local_K = K_base_tile * K_multiple;
