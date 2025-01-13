@@ -127,4 +127,4 @@ int32_t gemv_tiled(System* sys, std::string param)
     return 0;
 }
 
-static __attribute__((unused)) Registry::Entry &__gemv_new__ = pimsim::registerFunc("gemv_new", gemv_new);
+static __attribute__((unused)) Registry::Entry &__gemv_tiled__ = pimsim::registerFunc("gemv_tiled", gemv_tiled);
