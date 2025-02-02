@@ -1,5 +1,5 @@
-M 540
-K 3200
-N 256
+M 1
+K 12288
+N 512
 input_acc 4
 accumulate_acc 16

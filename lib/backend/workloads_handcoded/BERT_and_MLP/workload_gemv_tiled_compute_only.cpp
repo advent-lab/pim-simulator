@@ -5,10 +5,10 @@
 #include <sstream>
 
 #include "backend/System.h"
-#include "gemm_tiled.h"
-int32_t gemm_tiled_compute_only(System* sys, std::string param_file){
+#include "gemv_tiled.h"
+int32_t gemv_tiled_compute_only(System* sys, std::string param_file){
     //Parameters:
-    int M = 256;
+    int M = 1;
     int K = 256;
     int N = 256;
     PrecisionT::Precision precision_input = PrecisionT::INT8;
@@ -65,7 +65,7 @@ int32_t gemm_tiled_compute_only(System* sys, std::string param_file){
 
    
 
-    func_gemm_tiled_compute_only(M, K, N, precision_input, precision_multiply, precision_accumulate, precision_result, requests, sys);
+    func_gemv_tiled_compute_only(M, K, N, precision_input, precision_multiply, precision_accumulate, precision_result, requests, sys);
     for (unsigned int i = 0; i < requests.size(); i++)
         sys->sendRequest(requests[i]);
 
@@ -74,4 +74,4 @@ int32_t gemm_tiled_compute_only(System* sys, std::string param_file){
 
 
 
-static __attribute__((unused)) Registry::Entry &__gemm_tiled_compute_only__ = pimsim::registerFunc("gemm_tiled_compute_only", gemm_tiled_compute_only);
+static __attribute__((unused)) Registry::Entry &__gemv_tiled_compute_only__ = pimsim::registerFunc("gemv_tiled_compute_only", gemv_tiled_compute_only);
